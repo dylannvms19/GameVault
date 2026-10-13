@@ -6,6 +6,15 @@
             <a th:href="@{/juegos/nuevo}" class="btn btn-primary">+ Nuevo Juego</a>
         </div>
 
+        <div style="margin-bottom: 30px;">
+            <form action="/juegos" method="get" style="display: flex; gap: 10px;">
+                <input type="text" name="buscar" th:value="${busquedaActual}" placeholder="Buscar juego por título..."
+                       style="flex: 1; padding: 10px; border-radius: 5px; border: 1px solid var(--bg-panel); background: var(--bg-panel); color: white;">
+                <button type="submit" class="btn btn-secondary">Buscar</button>
+                <a th:if="${busquedaActual != null}" href="/juegos" class="btn btn-secondary" style="background: var(--bg-panel);">Limpiar</a>
+            </form>
+        </div>
+
         <div class="grid">
             <div class="panel" th:each="juego : ${juegos}" style="padding: 0; overflow: hidden;">
 
