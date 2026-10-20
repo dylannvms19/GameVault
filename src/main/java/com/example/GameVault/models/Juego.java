@@ -22,9 +22,19 @@ public class Juego {
     @Column(length = 1000)
     private String descripcion;
 
-    @Column(name = "portada")
+    @Column(name = "portada_url")
     private String portadaUrl;
 
+    @Column
     private Double precio;
+
+    @Column
+    private String categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+
 }
 

@@ -1,23 +1,42 @@
 <th:block th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
-    <title>Subir Juego — GameVault</title>
+    <title th:text="${juego != null} ? 'Editar Juego — GameVault' : 'Subir Juego — GameVault'">Subir Juego — GameVault</title>
     <main class="container">
         <div class="panel" style="max-width: 600px; margin: 0 auto;">
 
-            <h2 class="text-gradient" style="margin-top: 0;">Añadir Nuevo Juego</h2>
-            <p style="color: var(--text-muted); margin-bottom: 30px;">
+            <h2 class="text-gradient" style="margin-top: 0;"
+                th:text="${juego != null} ? 'Editar Juego' : 'Añadir Nuevo Juego'">Añadir Nuevo Juego</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;"
+               th:text="${juego != null} ? 'Modifica la información de tu juego. Si no eliges una portada nueva, se conserva la actual.' : 'Sube la información y la portada de un nuevo juego a la bóveda.'">
                 Sube la información y la portada de un nuevo juego a la bóveda.
             </p>
 
-            <form th:action="@{/juegos}" method="post" enctype="multipart/form-data">
+            <!-- Si hay un juego en el modelo es edición; si no, es alta -->
+            <form th:action="${juego != null} ? @{/juegos/editar/{id}(id=${juego.id})} : @{/juegos}"
+                  method="post" enctype="multipart/form-data">
 
                 <div class="form-group">
                     <label for="titulo" class="form-label">Título del Juego</label>
-                    <input type="text" id="titulo" name="titulo" required class="form-control">
+                    <input type="text" id="titulo" name="titulo" required class="form-control"
+                           th:value="${juego != null} ? ${juego.titulo}">
                 </div>
 
                 <div class="form-group">
                     <label for="descripcion" class="form-label">Descripción Breve</label>
-                    <textarea id="descripcion" name="descripcion" rows="4" required class="form-control" style="resize: vertical;"></textarea>
+                    <textarea id="descripcion" name="descripcion" rows="4" required class="form-control" style="resize: vertical;"
+                              th:text="${juego != null} ? ${juego.descripcion}"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="precio" class="form-label">Precio (USD)</label>
+                    <input type="number" id="precio" name="precio" step="0.01" min="0" required class="form-control"
+                           th:value="${juego != null} ? ${juego.precio}">
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria" class="form-label">Categoría</label>
+                    <input type="text" id="categoria" name="categoria" required class="form-control"
+                           placeholder="Ej. Aventura, RPG, Acción..."
+                           th:value="${juego != null} ? ${juego.categoria}">
                 </div>
 
                 <div class="form-group" style="background-color: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; border: 1px dashed var(--primary);">
@@ -25,14 +44,18 @@
                         📸 Subir Portada (Imagen)
                     </label>
 
-                    <input type="file" id="portada" name="portada" accept="image/*" required class="form-control" style="border: none; background: transparent; padding-left: 0;">
+                    <!-- La portada solo es obligatoria al crear; al editar es opcional -->
+                    <input type="file" id="portada" name="portada" accept="image/*"
+                           th:required="${juego == null}"
+                           class="form-control" style="border: none; background: transparent; padding-left: 0;">
 
                     <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px; margin-bottom: 0;">
                         El tamaño máximo configurado en el servidor es de <b>2MB</b> por archivo.
                     </p>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;">
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;"
+                        th:text="${juego != null} ? 'Guardar Cambios' : 'Guardar en la Bóveda'">
                     Guardar en la Bóveda
                 </button>
             </form>
